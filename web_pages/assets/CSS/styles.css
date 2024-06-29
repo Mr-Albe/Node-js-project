@@ -105,7 +105,7 @@ nav .logo {
     width: 100%;
 }
 
-#menuBtn {
+#menuBtn, #closeBtn {
     margin-right: 20px;
     display: none;
     font-size: 24px;
@@ -113,7 +113,7 @@ nav .logo {
     cursor: pointer;
 }
 
-#closeBtn {
+/* #closeBtn {
     display: none;
     font-size: 24px;
     color: white;
@@ -121,7 +121,7 @@ nav .logo {
     position: absolute;
     top: 20px;
     right: 20px;
-}
+} */
 
 .text-box p {
     font-size: 14px;

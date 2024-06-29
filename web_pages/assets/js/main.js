@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
       navLinks.style.right = "-100%";
       navLinks.classList.remove("active");
       menuBtn.style.display = "block";
-      closeBtn.style.dsssisplay = "none";
+      closeBtn.style.display = "none";
       body.classList.remove('no-scroll'); // Active le défilement de la page
   });
 });
@@ -50,33 +50,31 @@ let swiperCards = new Swiper('.card__content', {
 });
 
 /* ====================================== form sending =====================================*/
-
-document.getElementById('contactForm').addEventListener('submit', function(event) {
+document.getElementById('contact-form').addEventListener('submit', async function (event) {
   event.preventDefault();
 
   const formData = {
       name: document.getElementById('name').value,
       email: document.getElementById('email').value,
-      message: document.getElementById('message').value
+      message: document.getElementById('message').value,
   };
 
-  fetch('/send-email', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.success) {
+  try {
+      const response = await fetch('/send-email', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (result.success) {
           alert('Email envoyé avec succès!');
       } else {
-          alert('Erreur lors de l\'envoi de l\'email.');
+          alert('Erreur lors de l\'envoi de l\'email: ' + result.error);
       }
-  })
-  .catch(error => {
-      console.error('Error:', error);
-      alert('Erreur lors de l\'envoi de l\'email.');
-  });
+  } catch (error) {
+      alert('Erreur: ' + error.message);
+  }
 });
