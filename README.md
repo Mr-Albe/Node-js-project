@@ -1,2 +1,1 @@
-# Nojs-project
-# Nojs-project
+# creation  a static website.
