@@ -78,3 +78,78 @@ document.getElementById('contact-form').addEventListener('submit', async functio
       alert('Erreur: ' + error.message);
   }
 });
+
+/*========================================= client comments =======================================*/
+
+document.getElementById('toggleCommentSection').addEventListener('click', function() {
+  const commentsSection = document.getElementById('comments-section');
+  if (commentsSection.style.display === 'none') {
+      commentsSection.style.display = 'block';
+  } else {
+      commentsSection.style.display = 'none';
+  }
+});
+
+document.getElementById('submitComment').addEventListener('click', function() {
+  const name = document.getElementById('name').value;
+  const commentText = document.getElementById('comment').value;
+
+  if (!name || !commentText) {
+      alert('Le nom et le commentaire ne peuvent pas être vides.');
+      return;
+  }
+
+  const formData = { name, comment: commentText };
+
+  fetch('/comments', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          loadComments();
+          document.getElementById('name').value = '';
+          document.getElementById('comment').value = '';
+      } else {
+          alert('Erreur lors de l\'envoi du commentaire.');
+      }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert('Erreur lors de l\'envoi du commentaire.');
+  });
+});
+
+function loadComments() {
+  fetch('/comments')
+  .then(response => response.json())
+  .then(data => {
+      const commentsList = document.getElementById('comments-list');
+      commentsList.innerHTML = '';
+      data.comments.forEach(comment => {
+          const commentDiv = document.createElement('div');
+          commentDiv.className = 'client-content';
+          commentDiv.innerHTML = `
+              <p><i class="fa-solid fa-quote-left"></i> ${comment.comment} <i class="fa-solid fa-quote-right"></i></p>
+              <div class="ident1">
+                  <img src="" alt="">
+                  <h5>${comment.name}</h5>
+                  <p class="content--p">Client</p>
+              </div>
+          `;
+          commentsList.appendChild(commentDiv);
+      });
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+}
+
+// Load comments on page load
+document.addEventListener('DOMContentLoaded', function() {
+  loadComments();
+});

@@ -295,7 +295,11 @@ nav .logo {
     margin-left:auto;
     margin-right: auto;
     width: 60%;
-    justify-content: center;
+    justify-content: center;#commentInput {
+        max-width: 600px;
+        margin: auto;
+        margin-bottom: 20px;
+    }
 }
 .rows {
     display: flex;
@@ -307,6 +311,11 @@ nav .logo {
     justify-content: center;
 }
 
+#commentInput {
+    max-width: 600px;
+    margin: auto;
+    margin-bottom: 20px;
+}
 
 .client-content {
     overflow: hidden;
