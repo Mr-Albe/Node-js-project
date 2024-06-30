@@ -54,7 +54,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   event.preventDefault();
 
   const formData = {
-      name: document.getElementById('name').value,
+      names: document.getElementById('names').value,
       email: document.getElementById('email').value,
       message: document.getElementById('message').value,
   };
@@ -80,76 +80,58 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 });
 
 /*========================================= client comments =======================================*/
+// Attend que le DOM soit chargé
+document.getElementById('comment-form').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-document.getElementById('toggleCommentSection').addEventListener('click', function() {
-  const commentsSection = document.getElementById('comments-section');
-  if (commentsSection.style.display === 'none') {
-      commentsSection.style.display = 'block';
-  } else {
-      commentsSection.style.display = 'none';
-  }
-});
+    const name = document.getElementById('name').value;
+    const comment = document.getElementById('comment').value;
 
-document.getElementById('submitComment').addEventListener('click', function() {
-  const name = document.getElementById('name').value;
-  const commentText = document.getElementById('comment').value;
-
-  if (!name || !commentText) {
-      alert('Le nom et le commentaire ne peuvent pas être vides.');
-      return;
-  }
-
-  const formData = { name, comment: commentText };
-
-  fetch('/comments', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.success) {
-          loadComments();
-          document.getElementById('name').value = '';
-          document.getElementById('comment').value = '';
-      } else {
-          alert('Erreur lors de l\'envoi du commentaire.');
-      }
-  })
-  .catch(error => {
-      console.error('Error:', error);
-      alert('Erreur lors de l\'envoi du commentaire.');
-  });
+    if (name && comment) {
+        fetch('/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, comment })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('name').value = '';
+                document.getElementById('comment').value = '';
+                loadComments();  // Charger les commentaires mis à jour
+                document.getElementById('comments-section').style.display = 'block';  // Afficher la section des commentaires
+            } else {
+                console.error(data.error);
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+    }
 });
 
 function loadComments() {
-  fetch('/comments')
-  .then(response => response.json())
-  .then(data => {
-      const commentsList = document.getElementById('comments-list');
-      commentsList.innerHTML = '';
-      data.comments.forEach(comment => {
-          const commentDiv = document.createElement('div');
-          commentDiv.className = 'client-content';
-          commentDiv.innerHTML = `
-              <p><i class="fa-solid fa-quote-left"></i> ${comment.comment} <i class="fa-solid fa-quote-right"></i></p>
-              <div class="ident1">
-                  <img src="" alt="">
-                  <h5>${comment.name}</h5>
-                  <p class="content--p">Client</p>
-              </div>
-          `;
-          commentsList.appendChild(commentDiv);
-      });
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
+    fetch('/comments')
+        .then(response => response.json())
+        .then(data => {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            data.comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('client-content');
+                commentDiv.innerHTML = `
+                    <p><i class="fa-solid fa-quote-left"></i> ${comment.comment} <i class="fa-solid fa-quote-right"></i></p>
+                    <div class="ident1">
+                        <img src="" alt="">
+                        <h5>${comment.name}</h5>
+                        <p class="content--p">Client</p>
+                    </div>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
+        });
 }
 
-// Load comments on page load
 document.addEventListener('DOMContentLoaded', function() {
-  loadComments();
+    loadComments();
 });

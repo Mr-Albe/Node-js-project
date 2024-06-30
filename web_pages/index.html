@@ -114,7 +114,7 @@
 
     </section>
 
-    <section  id="comments-section" style="display: none;" class="clients">
+    <section  id="comments-section" class="clients" style="display:none">
         <h4>
             Ecoutez ce que nos clients pensent de nous
         </h4>
@@ -125,18 +125,13 @@
 
     </section> 
 
-    <h1>Blog Comments</h1>
-    <button id="toggleCommentSection">Ajouter un commentaire</button>
     <div id="commentInput">
         <h1>Blog Comments</h1>
-        <button id="toggleCommentSection">Ajouter un commentaire</button>
-        <div id="commentInput">
-            <input type="text" id="name" placeholder="Votre nom..." required>
-            <textarea id="comment" placeholder="Votre commentaire..." required></textarea>
-            <button id="submitComment">Envoyer</button>
-        </div>id="name" placeholder="Votre nom..." required>
-        <textarea id="comment" placeholder="Votre commentaire..." required></textarea>
-        <button id="submitComment">Envoyer</button>
+        <form id="comment-form">
+            <input type="text" id="name" name="name" placeholder="Votre nom..." required>
+            <textarea id="comment" name="comment" placeholder="Votre commentaire..." required></textarea>
+            <button type="submit">Ajouter</button>
+        </form>    
     </div>
 
     <footer class="footer">

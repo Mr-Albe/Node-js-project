@@ -1,25 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 const path = require('path');
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static('web_pages'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('web_pages'));
 
-// Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, 'web_pages')));
-const COMMENTS_FILE = path.join(__dirname, 'comments.txt');
+const COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
-
-
+// Endpoint pour obtenir les commentaires
 app.get('/comments', (req, res) => {
     fs.readFile(COMMENTS_FILE, 'utf8', (err, data) => {
         if (err) {
@@ -31,19 +23,13 @@ app.get('/comments', (req, res) => {
     });
 });
 
-app.get('/comments', (req, res) => {
-    fs.readFile(COMMENTS_FILE, 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).json({ success: false, error: err.toString() });
-        }
-
-        const comments = data ? JSON.parse(data) : [];
-        res.status(200).json({ success: true, comments: comments.slice(-10) });
-    });
-});
-
+// Endpoint pour ajouter un commentaire
 app.post('/comments', (req, res) => {
     const { name, comment } = req.body;
+
+    if (!name || !comment) {
+        return res.status(400).json({ success: false, error: 'Nom et commentaire sont requis.' });
+    }
 
     fs.readFile(COMMENTS_FILE, 'utf8', (err, data) => {
         if (err && err.code !== 'ENOENT') {
@@ -63,11 +49,11 @@ app.post('/comments', (req, res) => {
     });
 });
 
-
+// Endpoint pour envoyer un email
 app.post('/send-email', (req, res) => {
-    const { name, email, message } = req.body;
+    const { names, email, message } = req.body;
 
-    if (!name || !email || !message) {
+    if (!names || !email || !message) {
         return res.status(400).json({ success: false, error: 'Tous les champs sont obligatoires.' });
     }
 
@@ -75,17 +61,15 @@ app.post('/send-email', (req, res) => {
         service: 'gmail',
         auth: {
             user: 'jeanalbikendy@gmail.com',
-            pass: 'pwma ppfa nafw uuvo' // Utilisez le mot de passe d'application généré ici
+            pass: 'pwma ppfa nafw uuvo' // Utilisez le mot de passe d'application ici
         }
     });
 
     const mailOptions = {
         from: email,
-        // to: 'albikendy.jean@student.ueh.edu.ht',
-        to: 'valenspierre509@gmail.com',
-        subject: `Nouveau message de ${name}        
-            email: ${email}`, 
-        text: message
+        to: 'albikendy.jean@student.ueh.edu.ht',
+        subject: `Nouveau message de ${names}`,
+        text: `email: ${email}\n\n${message}`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
