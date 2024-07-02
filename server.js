@@ -6,45 +6,41 @@ const path = require('path');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('web_pages'));
+// app.use(express.static('web_pages'));
+app.use(express.static(path.join(__dirname, 'web_pages')));
 
-const COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
 // Endpoint pour obtenir les commentaires
 app.get('/comments', (req, res) => {
-    fs.readFile(COMMENTS_FILE, 'utf8', (err, data) => {
+    fs.readFile('comments.json', (err, data) => {
         if (err) {
-            return res.status(500).json({ success: false, error: err.toString() });
+            return res.status(500).send('Error reading comments');
         }
-
-        const comments = data ? JSON.parse(data) : [];
-        res.status(200).json({ success: true, comments: comments.slice(-10) });
+        res.send(JSON.parse(data));
     });
 });
 
 // Endpoint pour ajouter un commentaire
 app.post('/comments', (req, res) => {
-    const { name, comment } = req.body;
-
-    if (!name || !comment) {
-        return res.status(400).json({ success: false, error: 'Nom et commentaire sont requis.' });
-    }
-
-    fs.readFile(COMMENTS_FILE, 'utf8', (err, data) => {
-        if (err && err.code !== 'ENOENT') {
-            return res.status(500).json({ success: false, error: err.toString() });
+    const newComment = req.body;
+    fs.readFile('comments.json', (err, data) => {
+        if (err) {
+            return res.status(500).send('Error reading comments');
+        }
+        
+        let comments = JSON.parse(data);
+        comments.push(newComment);
+        if (comments.length > 10) {
+            comments = comments.slice(-10); // Keep only the last 10 comments
         }
 
-        const comments = data ? JSON.parse(data) : [];
-        comments.push({ name, comment });
-
-        fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 2), 'utf8', err => {
+        fs.writeFile('comments.json', JSON.stringify(comments, null, 2), (err) => {
             if (err) {
-                return res.status(500).json({ success: false, error: err.toString() });
+                return res.status(500).send('Error saving comment');
             }
-
-            res.status(200).json({ success: true });
+            res.send({ status: 'success' });
         });
     });
 });

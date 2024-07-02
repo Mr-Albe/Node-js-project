@@ -113,16 +113,6 @@ nav .logo {
     cursor: pointer;
 }
 
-/* #closeBtn {
-    display: none;
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-} */
-
 .text-box p {
     font-size: 14px;
     margin: 20px 0;
@@ -198,14 +188,14 @@ nav .logo {
  
 /* Styles de base pour la carte */
 .cardd {
-    background: #fff; /* Couleur de fond blanche */
-    width: 270px; /* Largeur fixe */
-    height: auto; /* Hauteur automatique */
-    margin: 10px; /* Marge de 10px tout autour */
-    text-align: center; /* Texte centré */
-    margin-bottom: 25px; /* Marge inférieure de 25px */
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6); /* Ombre portée */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition pour l'animation */
+    background: #fff;
+    width: 270px; 
+    height: auto;
+    margin: 10px; 
+    text-align: center; 
+    margin-bottom: 25px; 
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Animation lors du survol */
@@ -281,7 +271,7 @@ nav .logo {
 /**********************CLIENTS*******************/
 
 .clients {
-    background: #F77A36;
+    /* background: #F77A36; */
     width: 100%;
     margin-top: 20px;
     justify-content: center;
@@ -301,7 +291,6 @@ nav .logo {
 }
 
 .rows {
-    background: #210440;
     display: flex;
     flex-direction: column;
     padding-top: 7px;
@@ -309,16 +298,16 @@ nav .logo {
     margin-right: auto;
     width: 60%;
     justify-content: center;
+
 }
 
 #commentInput {
     max-width: 100%;
     margin: auto;
-    margin-bottom: 20px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    background: burlywood;
+    background: #012169;
     align-items: center;
     height: auto;
     overflow: hidden;
@@ -356,42 +345,47 @@ form button {
     overflow: hidden;
     margin-top:30px;
     flex-basis:55% ;
-    background: #fff;
-    padding: 45px;
     display: flex;
+    flex-direction: column;
 }
 
-/* .client-content img {
-    height: 40px;
-    margin-left: 5px;
-    margin-right: 35px;
-    border-radius: 50%;
-} */
+#comment--client {
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    background: #fff;
+    height: auto;
+}
 
 .client-content p {
-    margin-top: 10px;
+    margin: 15px 10px;
 }
 
 .client-content .content--p  {
+    text-align: center;
     margin-top: 3px;
     font-size: 12px;
 }
 
-/* 
 .ident {
-    height: 60px;
+    margin: 10px 20px;
     width: 15%;
-    margin-right: 35px;
-    border-radius: 50%;
-    margin-top: -19px;
-} */
-
-.ident1 {
-    width: 15%;
-    height:60px;
+    height:auto;
     margin-left: 35px;
     border-radius: 50%;
-    margin-top: -30px;
+}
+
+.fa-user {
+    color: #210440;
+    font-size: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.ident h5 {
+    margin-top: 10px;
+    text-align: center;
 }
 
 
